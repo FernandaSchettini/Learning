@@ -5,3 +5,62 @@ Decimal preco = 45.99;
     
 System.debug('O nome do produto é:' + produto);
 System.debug('O valor é: ' + preco);
+
+// 3. Escreva um algoritmo que defina um valor inteiro e escreva (na tela) o seu
+antecessor.
+
+Integer n1 = 6;
+    
+System.debug('O valor do antecessor é:' + --n1);
+
+// Escreva um algoritmo que tenha dois valores reais, some os valores e exiba o
+resultado.
+
+Integer a = 2, b= 3;
+Integer soma = a+b;
+
+System.debug(soma);
+
+// 5. Escreva um algoritmo que receba uma idade, subtraia do ano atual e exiba o
+resultado, mostrando ‘Nascido em (valorDaSubtração)’.
+
+Integer idade = 35;
+Integer ano = 2023;
+
+Integer valorDaSubtracao = ano - idade;
+    
+System.debug('Nascido em ' + valorDaSubtracao);
+
+//6. Escreva um algoritmo para definir as dimensões de um retângulo (base e altura),
+calcular e escrever a área do retângulo.
+
+Integer b = 2, a = 5;
+Integer areaRetangulo = a*b;
+System.debug(areaRetangulo);
+
+//7. Escreva um algoritmo para definir o salário mensal atual de um funcionário e o
+percentual de reajuste de 25%. Calcular e escrever o valor do novo salário com o
+acréscimo do reajuste.
+
+Decimal salarioMensal= 1250.66;
+Decimal percentual = 1.25;
+
+System.debug('O novo salario com o reajuste é: ' + salarioMensal*percentual);
+
+//8. Escreva um algoritmo que atribua 3 notas, calcule a média e exiba o resultado.
+
+Integer a = 8, b = 7, c= 6;
+Decimal media = a+b+c;
+
+System.debug('A média do resultado foi de :' + media/3);
+
+//9. Faça um algoritmo que define três notas de um aluno, calcule e escreva a média
+final deste aluno. Considerar que a média é ponderada e que o peso das notas é 2,
+3 e 5. Fórmula para o cálculo da média final é:
+
+Integer nota1 = 8, nota2= 6, nota3 = 5;
+Integer novaNota1 =  nota1*2;
+Integer novaNota2 =  nota2*3;
+Integer novaNota3 =  nota3*5;
+
+System.debug('A média final das notas é:' + (novaNota1 + novaNota2 + novaNota3)/10 );
