@@ -1,0 +1,129 @@
+//1 - Crie uma trigger em Lead que antes de inserir um novo lead, coloque informações nos campos fax (XX) XXXXX - XXXX, Site www.example.com, e receita anual 0.
+
+//fax, web site, receita
+
+trigger Ex1 on Lead (before insert) {
+    
+	if(Trigger.isBefore){
+    	if(Trigger.isInsert){
+        for (lead itemLead: Trigger.New){
+        itemLead.Fax  = '(xx) xxxxx - xxxx';
+        itemLead.Website = 'www.exemple.com';
+        itemLead.AnnualRevenue = 0;
+                 }
+    }         
+}
+}
+
+
+//2 - altere o código da trigger de Lead realizando condições para verificar se:
+se o fax estiver vazio, atribuir sem fax 
+se site estiver vazio, atribuir site indefinido
+se receita anual estiver vazio, atribuir 0
+
+
+trigger Ex1 on Lead (before insert) {
+   
+        if(Trigger.isInsert){
+            for(Lead itemLead: Trigger.New){
+                if(String.isBlank(itemLead.Fax)){
+                    itemLead.Fax = 'Sem fax';
+                }
+                if(String.isBlank(itemLead.Website)){
+                    itemLead.Website = 'Site indefinido';
+                }
+                if(itemLead.AnnualRevenue == null){
+                    itemLead.AnnualRevenue = 0;
+                }
+            }
+        }
+}
+
+//3 -  Atualize o código da trigger de Lead, adicionando as seguintes condições
+Se receita anual >= 0 e < 1000 a classificação deverá ser Cold
+Se receita anual >= 10000 e < 10000 a classificação deverá ser Warm
+Se receita anual >= 100000 a classificação é Hot
+trigger Ex3 on Lead (before insert, before Update) {
+   
+        if(Trigger.isUpdate){
+            for(Lead itemLead: Trigger.New){
+                if (itemLead.AnnualRevenue >= 0 && itemLead.AnnualRevenue <1000 ){
+                 itemLead.Rating = 'Cold';
+                    
+                 }if (itemLead.AnnualRevenue >= 1000 && itemLead.AnnualRevenue <100000 ){
+                 itemLead.Rating = 'Warm';
+                     
+                 }if (itemLead.AnnualRevenue >= 100000){
+                 itemLead.Rating = 'Hot';
+                }
+            }
+        }
+        }
+
+
+//4. Em oportunidade, quando a fase for alterada para Closed Lost, deve ser inserido um motivo. Se a fase estiver em Closed Lost e o motivo estiver vazio, emitir uma mensagem de erro. O motivo deve ser preenchido.
+Dica: Caso não exista o campo motivo na sua org, crie no gerenciador de objetos.
+
+trigger Ex4 on Opportunity (after Update){
+    
+	if(Trigger.isUpdate && Trigger.isAfter){
+        for(Opportunity opp: trigger.new){
+            if(opp.StageName =='Closed Lost' && opp.Motivo_da_Perda__c == null){
+                opp.Motivo_da_Perda__c.addError('Preencha o motivo');
+                
+}
+}
+}
+}
+
+
+
+//5.Criar também uma oportunidade com valor zerado e fechamento para 15 dias após a data de criação.
+
+trigger Ex5 on Opportunity (before insert) {
+        for(Opportunity opp: trigger.new){
+            opp.Amount = 0;
+            opp.CloseDate = System.Today().addDays(15);
+}
+}
+
+
+//6.Em Lead, não permitir alterar classificação para cold e warm se receita anual estiver >=500000.
+
+trigger Ex66 on Lead (before insert, before Update){
+
+        for(Lead lead: trigger.new){
+		if((lead.Rating == 'Cold' || lead.Rating == 'Warm') 
+            && lead.AnnualRevenue >= 500000){
+                
+      lead.addError('Receita Anual maior ou igual a R$ 500.000,não aceita classificação COld ou Warm');
+       
+        }
+    }
+}
+
+
+//7. Realize uma trigger onde ao criar uma oportunidade caso o valor da oportunidade seja >= a 100000 e <= 200000, a fase deve ser colocada automaticamente para value proposition, senão a fase deve ficar em prospecting.
+
+
+trigger Ex7 on Opportunity (before insert) {
+   for(Opportunity opp: trigger.new){
+       if(opp.Amount >= 100000 && opp.Amount <=200000 && Trigger.IsUpdate){
+           opp.StageName = 'Value Proposition';
+       }else{
+           opp.StageName = 'Prospecting';
+       }
+   }      
+}
+
+//8. Realize uma trigger, que marque novas contas do setor de “Tecnologia” ou “Finanças” como “Hot” no sistema, ajudando assim sua empresa a priorizar essas vendas.
+
+trigger Ex8 on Account (before insert) {
+    If(trigger.isInsert){
+for(Account acc: trigger.new){
+    if(acc.Industry  == 'Technology' || acc.Industry == 'Finance'){
+        acc.Rating = 'Hot';
+  }
+}
+ }
+}
