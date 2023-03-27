@@ -1,0 +1,112 @@
+//1.Selecione o nome, valor e data de fechamento das oportunidades.
+Select Name, Amount, CloseDate 
+From Opportunity
+
+//2. Selecione o nome e valor das oportunidades com data de fechamento maior que 01/06/2021.
+Select Name, Amount, CloseDate 
+From Opportunity 
+Where CloseDate > 2021-06-01
+
+
+//3.Selecione o nome da oportunidade, valor, descrição e next step das oportunidades com fase Closed won e valor acima de 100000.
+Select Name, Amount, Description, NextStep, StageName 
+From Opportunity 
+Where StageName = 'Closed won' AND Amount > 100000
+
+//4.Selecione o nome, classificação, tipo, ano de início das contas que possuam ‘Uni’ no começo do nome da conta.
+Select Name, Rating, Type, YearStarted
+From Account
+Where name  like  '%uni%'
+
+//5.Selecione o nome completo, empresa e email dos leads com ‘.net’ no final do email e status do lead como Working - Contacted.
+Select Name, Company, Email, Status
+From Lead
+Where Email  like  '%.net' AND Status = 'Working - Contacted'
+
+
+//8. Selecione o nome, valor, fase, next step e descrição das oportunidades que possuem ‘Oil’ ou ‘Gene’ em qualquer parte do nome.
+Select Name, Amount, StageName, NextStep, Description
+From Opportunity
+WHERE Name like '%oil%' OR Name like '%gene%'
+
+//9.Selecione todas as despesas sem valor, junto com o nome do cliente relacionado, ordenadas alfabeticamente
+select Name, Valor__c 
+From Despesa__c 
+Where Valor__c = null 
+Order By Name
+
+//10. Selecione o nome, telefone de contas e o nome, valor e fase das oportunidades ligadas a cada conta.
+SELECT Account.Phone, Account.Name, Amount, StageName , Name
+From Opportunity
+
+
+//11. Selecione os emails repetidos em lead.
+SELECT Email 
+FROM Lead 
+GROUP BY Email HAVING COUNT(Email) > 1
+
+
+//13. Selecione os clientes agrupados pelo ramo de empresa que possuem uma renda anual maior que 1000 reais.
+SELECT Account.Industry, SUM(AnnualRevenue)
+FROM Account
+WHERE AnnualRevenue > 1000
+GROUP BY Account.Industry
+
+
+//14. Selecione todas as oportunidades em que os clientes tenham sido criado no mês de julho.
+
+SELECT name , Oportunities__c
+FROM Opportunity
+Where CALENDAR_MONTH(Oportunities__c) =7
+
+
+//15. Selecione os usuários que fizeram login no sistema, no ultimo mês.
+SELECT name, LastLoginDate
+FROM User
+where LastLoginDate >= LAST_MONTH
+
+//16. Selecione os leads que foram atualizados por um usuário com perfil de administrador do sistema no mês atual.
+
+SELECT Id, Name, LastModifiedDate, LastModifiedBy.Name, LastModifiedBy.Profile.Name 
+FROM Lead
+WHERE LastModifiedDate >= THIS_MONTH AND LastModifiedBy.Profile.Name = 'Administrador do sistema'
+
+
+ //17. Some os valores de todas as oportunidades que foram perdidas no ultimo mês e agrupe pelo motivo da perda
+
+SELECT StageName Fase, COUNT(id) contador, SUM(Amount) soma
+FROM Opportunity
+WHERE StageName = 'Closed Lost' AND CreatedDate = LAST_MONTH
+GROUP BY StageName
+
+//18.Retorne todos os contatos das contas que possuem contas pai
+SELECT Id, Name, Parent.Name,
+(SELECT Id, Name FROM Contacts)
+FROM Account
+WHERE Parent.Name !=NULL
+
+//19 - Retorne o número de registros de contatos  da conta 'Restaurante Gifara' 
+
+SELECT Id, Name,
+(SELECT Name FROM Contacts)
+FROM Account
+WHERE name = 'Restaurante Gifara'
+
+
+//20 - Retorne o número de registros de Oportunidades  da conta 'Restaurante Gifara' 
+SELECT Id, Name,
+(SELECT Name FROM Opportunities)
+FROM Account
+WHERE name = 'Restaurante Gifara'
+
+
+//22.Selecione qual são os tipos de caso que são mais abertos durante o mês atual
+Select Type, Count(Id)
+From Case
+Where CreatedDate = THIS_MONTH
+Group By Type 
+ORDER BY Count(Id) Desc Limit 1
+23.Selecione quais são as despesas criadas por empresas que estão inativas
+SELECT Id, Name, Conta__r.Name
+FROM Despesa__c 
+WHERE Conta__r.Active__c = 'No'
