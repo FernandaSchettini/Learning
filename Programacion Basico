@@ -1,0 +1,7 @@
+//2. Escreva um algoritmo que tenha nome de produto e preço exiba na tela os valores.
+
+String produto = 'Cadeira';
+Decimal preco = 45.99;
+    
+System.debug('O nome do produto é:' + produto);
+System.debug('O valor é: ' + preco);
