@@ -1,0 +1,207 @@
+//1 - Se o número de funcionários no Lead for menor que 1000, colocar no campo Tamanho da Empresa ( Não existe ) , colocar empresa pequena.
+trigger Exc1 on Lead (before insert) {
+    
+    If(trigger.isInsert){
+for(Lead newLead: trigger.new){
+    if(newLead.NumberOfEmployees <= 1000){
+        newLead.Tamanho_Empresa__c = 'Pequena';      
+}
+}
+}
+}
+
+//2 - Criar uma trigger em Conta, caso o campo CNPJ não for preenchido dar um erro
+
+trigger Exc2 on Account (before insert) {
+        If(trigger.isInsert){
+            
+for(Account newAcc: trigger.new){
+    if(newAcc.CNPJ__c == null){
+        newAcc.addError('CNPJ precisa ser preenchido');      
+}
+}
+}
+}
+
+
+
+//3 - Criar uma trigger para dar 10% de desconto nas oportunidades para conta que tem o campo VIP verdadeiro
+
+trigger Excc3 on Opportunity (before insert, before Update) {
+        If((trigger.isUpdate || trigger.isInsert) && trigger.IsBefore ){      
+for(Opportunity opp: trigger.new){
+    if([SELECT Id, VIP__c FROM Account WHERE Id = :opp.AccountId].VIP__c){
+		opp.Amount = opp.Amount * (1 - 0.1);                       
+}
+}
+}
+}
+
+//4-Criar uma trigger em oportunidade para o caso o valor da oportunidade seja maior que 500000, automaticamente a fase passa para negotiation/review.
+trigger Exc4 on Opportunity (before insert) {
+
+        If(trigger.isInsert && trigger.IsBefore){
+            
+for(Opportunity opp: trigger.new){
+    if(opp.Amount > 500000){
+        opp.StageName ='Negotiation/Review';      
+}
+}
+}
+}
+
+//5 -Criar uma trigger em conta que copia as informações do Endereço de Cobrança para o Endereço de Entrega quando o mesmo não for preenchido
+trigger Exc5 on Account (before insert) {
+         If(trigger.isbefore && trigger.isInsert){
+for(Account newAcc: trigger.new){
+    if(newAcc.ShippingStreet ==null && newAcc.BillingStreet !=null){
+          newAcc.ShippingStreet = newAcc.BillingStreet;
+}
+}
+}
+}
+
+//6 - Realize uma trigger onde ao atualizar e um Lead deve ser obrigado o preenchimento dos campos Celular, E-mail e Origem do Lead.  Caso a Origem do Lead for atualizado para "Web" o status deve ser alterado automaticamente para "Hot"
+trigger Exc6 on Lead (before Update) {
+        If(trigger.isUpdate && trigger.IsBefore){
+for(Lead newLead: trigger.new){
+    if(newLead.MobilePhone == null){
+         newLead.MobilePhone.AddError('O campo precisa ser preenchido'); 
+    if(newLead.Email == null){
+         newLead.Email.AddError('O campo precisa ser preenchido'); 
+    if(newLead.LeadSource == null){
+         newLead.LeadSource.AddError('O campo precisa ser preenchido'); 
+    if(newLead.LeadSource == 'Web'){
+         newLead.Status = 'Hot';
+}
+}
+}
+}
+}
+}
+}
+
+
+//7 - Antes de atualizar uma oportunidade, Se a fase anterior estiver fechada e perdida e tentarem alterar para qualquer outra nova fase. Emitir mensagem de erro.
+trigger Exc7 on Opportunity (after Update) {
+        If(trigger.isAfter && trigger.IsUpdate){
+for(Opportunity opp: trigger.new){
+    if(trigger.oldMap.get(opp.id).stagename == 'closed Lost' && opp.stagename != 'closed Lost'){
+         opp.StageName.AddError('nao pode ser alterado'); 
+}
+}
+}
+}
+
+//8 - Após a atualização de uma oportunidade, se o valor for maior ou igual a 50000 e a fase estiver fechada e ganha, crie uma tarefa associada a ela, com o assunto: Parabenizar a empresa pela nova aquisição.
+
+trigger HojeTrigger0333 on Opportunity (After Update){ 
+if(Trigger.isUpdate && Trigger.IsAfter){ 
+for (Opportunity opp : Trigger.new) {
+ if(opp.Amount >= 50000 && opp.StageName == 'Closed Won'){ task tarefa = new task(); tarefa.Subject = 'Parabéns empresa pela nova conquista'; } } } }
+
+//9  - Antes de inserir uma nova conta, faça:
+
+trigger Ex9 on Account (before insert, after insert) {
+
+    
+trigger AccountT3 on Account (before insert, before update, after insert) {
+    
+    //Trigger vai agir antes da inserção de dados.
+    if(trigger.isBefore){
+        //Trigger vai ser acionado no momento da inserção.
+        if(trigger.isInsert){
+            //Usando o loop for para acessar cada linha dos meus registros.
+            for(Account acc : Trigger.new){
+                //Condição para verificar se a Receita anual é igual a nulo ou menor que 0.
+                if(acc.AnnualRevenue == null || acc.AnnualRevenue < 0){
+                    //Se condição for verdadeira. Mensagem de erro para impedir o usuário de criar um registro com Receita anual nula e menor que 0.
+                    acc.AnnualRevenue.addError('Campo inválido');
+                }//Condição para verificar se a Receita anual é menor que 100000.
+                else if(acc.AnnualRevenue < 100000){
+                    //Se não se colocar Classificação como Cold
+                    acc.Rating = 'Cold';
+                }//Condição para verificar se a Receita anual é maior ou igual a 100000 e menor que 500000.
+                else if(acc.AnnualRevenue >= 100000 && acc.AnnualRevenue < 500000){
+                    //Se não se colocar Classificação como Warm
+                    acc.Rating = 'Warm';
+                }//Condição para verificar se a Receita anual é maior ou igual a 500000.
+                else if(acc.AnnualRevenue >=500000){
+                    //Se não se colocar Classificação como Hot
+                    acc.Rating = 'Hot';
+                }
+            }
+        }//Trigger vai ser acionado no momento do update.
+        if(trigger.isUpdate){
+            //Usando o loop for para acessar cada linha dos meus registros.
+            for(Account acc : Trigger.new){
+                //Condição para verificar se a Receita anual é maior ou igual a 100000 e menor que 500000 e classificação diferente de Warm.
+                if((acc.AnnualRevenue >= 100000 && acc.AnnualRevenue < 500000) && acc.Rating != 'Warm'){
+                    //Se condição for verdadeira. Mensagem de erro para impedir o usuário de criar um registro com a Classificação diferente de Warm.
+                    acc.Rating.addError('Não é possivel fazer alteração');
+                }//Condição para verificar se a Receita anual é maior ou igual a 500000 e classificação diferente de Hot.
+                if(acc.AnnualRevenue >=500000 && acc.Rating != 'Hot'){
+                    //Se condição for verdadeira. Mensagem de erro para impedir o usuário de criar um registro com a Classificação diferente de Hot.
+                    acc.Rating.addError('Não é possivel fazer alteração');
+                }
+            }
+        }
+    }
+    //Trigger vai agir depois da inserção de dados.
+    if(trigger.isAfter){
+        //Trigger vai ser acionado no momento da inserção.
+        if(trigger.isInsert){
+            //Usando o loop for para acessar cada linha dos meus registros.
+            for(Account acc : Trigger.new){
+                //Criando um novo Objeto oportunidade.
+                Opportunity opportunity = new Opportunity(
+                Name = acc.Name,
+                Amount = 0,
+                CloseDate = Date.today().addDays(15),
+                StageName = 'Prospecting'
+                );
+                //Inserção do Objeto oportunidade.
+                Insert opportunity;
+                //Condição para verificar se a Receita anual é maior ou igual a 500000.
+                if(acc.AnnualRevenue >=500000){
+                    //Se for verdadeira, criar uma nova tarefa
+                    //Criando um novo Objeto tarefa.
+                    Task task = new Task(
+                    WhatId = acc.Id,
+                    Description = 'Agendar Reunião',
+                    ActivityDate = date.today().addDays(1)    
+                    );
+                    //Inserção do Objeto tarefa.
+                    Insert task;
+                }
+            }
+        }
+    }
+}
+
+
+//10 - Toda vez que um contato for atualizado, colocar no campo Descrição qual foi o último usuário que modificou o contato e o data/hora que foi feito.
+
+trigger Ex10ApexIIBefore on Contact (before update) { 
+if (trigger.isBefore && trigger.isUpdate) { 
+for (Contact contact : Trigger.new) { 
+contact.Description = 'Última modificação por ' + UserInfo.getName() + ' em ' + DateTime.now().format(); } } }
+
+
+Faça uma Trigger que, quando alguma oportunidade com valor superior a 350.000 e fase igual a Negotiation/Review seja atualizado, seja criado um novo registro no objeto Mercado
+No objeto mercado, deve haver o campo de Oportunidade, onde estará referenciando de qual oportunidade veio esse mercado
+trigger novatrigger on Opportunity (after Update) {
+    If(trigger.IsAfter && trigger.IsUpdate){
+        List<Mercado__c> lstMercado = New List<Mercado__c>();
+        for(opportunity Opp : Trigger.new){
+            If(Opp.Amount > 350.000 && Opp.StageName == 'Negotiation/Review'){
+                Mercado__c Merc = New Mercado__c(
+                Name = 'Mercado fê',
+                Nome_da_Oportunidade__c = opp.Id
+                );
+                   lstMercado.add(Merc);
+            }
+        }
+        {Insert lstMercado;}
+    }
+}
