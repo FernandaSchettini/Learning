@@ -1,0 +1,156 @@
+// 1.Imprima no apex o nome, empresa, estado/província e email de todos os leads que pertencem aos estados CA ou VA, ordenados pelo nome de forma decrescente.
+
+list<Lead> lead = [ select name, company, city,state, email from lead where state like '%ca%' or state like'%va%' order by name desc];
+For (Lead leads : lead){
+
+System.debug('Informações dos Lead'); 
+    system.debug('Nome: ' + Leads.Name); 
+    System.debug('Email: ' + Leads.Email); 
+    System.debug('Empresa: ' + Leads.Company); 
+    System.debug('Estado: ' + Leads.State); 
+    System.debug('\n');}
+    
+    // 2.Imprima no apex o nome e status dos leads com status “working” e os “not contacted” e que possuam ‘Co’ em qualquer parte do nome''.
+
+list<Lead> leads =[Select Name, Status From Lead where (status like 'Working - Contacted' Or Status like 'Open - Not Contacted') And Name like '%co%'];
+For(Lead Lead: leads ){
+    System.debug('Informações dos Lead');
+    system.debug('Nome: ' + Lead.Name);
+    System.debug('Status: ' + Lead.Status);
+    System.debug('\n');
+}
+
+// 3.Imprima no apex o nome, cargo e telefone dos contatos que possua United ou Ltd em qualquer parte do nome da conta.
+
+list<contact> ctt =[SELECT Name, Title, Phone FROM Contact WHERE Account.Name LIKE '%United%' OR Account.Name LIKE '%Ltd%' ];
+For(Contact Contact: ctt){
+    System.debug('Informações dos Contatos');
+    system.debug('Nome: ' + Contact.Name);
+    System.debug('Cargo: ' + Contact.Title);
+    System.debug('Telefone: ' + Contact.Phone);
+    System.debug('\n');
+}
+
+//4.Imprima em apex o nome, phone, rating, data de criação das contas ordenados por data de criação decrescente, mostrando também o nome e telefone dos contatos ordenados por nome ligados a cada uma das contas.
+
+List<Account> accounts = [SELECT Name, Phone, Rating, CreatedDate,(SELECT Name, Phone FROM Contacts ORDER BY Name)FROM Account ORDER BY CreatedDate DESC];
+for (Account acc : accounts){
+    System.debug('Account Name: ' + acc.Name);
+    System.debug('Phone: ' + acc.Phone);
+    System.debug('Rating: ' + acc.Rating);
+    System.debug('CreateDate: ' + acc.CreatedDate + '\n');
+
+    for (Contact con : acc.Contacts) {
+        System.debug('Contact Name: ' + con.Name);
+        System.debug('Contact Phone: ' + con.Phone + '\n');}
+}
+
+//5.Com Apex, insira 5 leads atribuindo valores aos campos considerados obrigatórios.
+
+Lead l1 = New Lead(LastName = 'Fagundes', Company = 'Biroliro', Status = 'Open - Not Contacted');
+insert l1;
+Lead l2 = New Lead(LastName = 'Santos', Company = 'Acm', Status = 'Open - Not Contacted');
+insert l2;
+Lead l3 = New Lead(LastName= 'Nunes', Company = 'Marvel', Status = 'Open - Not Contacted');
+insert l3;
+Lead l4 = New Lead(LastName= 'França', Company = 'Dc', Status = 'Open - Not Contacted');
+insert l4;
+Lead l5 = New Lead(LastName = 'Braz', Company = 'Netflix', Status = 'Open - Not Contacted');
+insert l5;
+
+
+// 6.Com Apex, insira 5 Contas atribuindo valores aos campos considerados obrigatórios. 
+Account A1 = New Account(Name = 'Acmm', Phone = '12457896', CNPJ__C = '31.965.106/0001-53');
+insert A1;
+Account A2 = New Account(Name = 'BBc', Phone = '32659881', CNPJ__C = '25.257.207/0001-77');
+insert A2;
+Account A3 = New Account(Name = 'Fox', Phone = '84613119', CNPJ__C = '70.092.714/0001-52');
+insert A3;
+Account A4 = New Account(Name = 'ESPN', Phone = '12345678', CNPJ__C = '83.866.763/0001-47');
+insert A4;
+Account A5 = New Account(Name = 'TNT', Phone = '98765432', CNPJ__C = '35.737.578/0001-00');
+insert A5;
+
+//7.Com Apex, insira uma lista de 10 Contas com valores obrigatórios, utilizando apenas um insert.
+Account A1 = New Account(Name = 'BANDEIRANTES', Phone = '9112457896', CNPJ__C = '90.965.106/0001-53');
+Account A2 = New Account(Name = 'GLOBO', Phone = '9032659881', CNPJ__C = '25.015.207/0001-77');
+Account A3 = New Account(Name = 'Fox2', Phone = '8784613119', CNPJ__C = '70.020.714/0001-52');
+Account A4 = New Account(Name = 'SYFY', Phone = '8112345678', CNPJ__C = '83.900.763/0001-47');
+Account A5 = New Account(Name = 'SPACE', Phone = '7798765432', CNPJ__C = '35.777.578/0001-00');
+Account A6 = New Account(Name = 'ELETROMIDIA', Phone = '1112457896', CNPJ__C = '31.440.106/0001-53');
+Account A7 = New Account(Name = 'NBC', Phone = '8832659881', CNPJ__C = '25.367.207/0001-77');
+Account A8 = New Account(Name = 'NETFLIX', Phone = '8484613119', CNPJ__C = '70.092.154/0001-52');
+Account A9 = New Account(Name = 'HBO', Phone = '9912345678', CNPJ__C = '83.866.003/0001-47');
+Account A10 = New Account(Name = 'SBT', Phone = '8198765432', CNPJ__C = '35.737.525/0001-00');
+
+LIST<Account> contas = new list <Account>();
+contas.add(A1);
+contas.add(A2);
+contas.add(A3);
+contas.add(A4);
+contas.add(A5);
+contas.add(A6);
+contas.add(A7);
+contas.add(A8);
+contas.add(A9);
+contas.add(A10);
+
+insert contas;
+
+//8.Com Apex, insira uma lista de 10 Contas com valores obrigatórios, utilizando apenas um insert.
+Account A1 = New Account(Name = 'BANDEIRANTES', Phone = '9112457896', CNPJ__C = '90.965.106/0001-53');
+Account A2 = New Account(Name = 'GLOBO', Phone = '9032659881', CNPJ__C = '25.015.207/0001-77');
+Account A3 = New Account(Name = 'Fox2', Phone = '8784613119', CNPJ__C = '70.020.714/0001-52');
+Account A4 = New Account(Name = 'SYFY', Phone = '8112345678', CNPJ__C = '83.900.763/0001-47');
+Account A5 = New Account(Name = 'SPACE', Phone = '7798765432', CNPJ__C = '35.777.578/0001-00');
+Account A6 = New Account(Name = 'ELETROMIDIA', Phone = '1112457896', CNPJ__C = '31.440.106/0001-53');
+Account A7 = New Account(Name = 'NBC', Phone = '8832659881', CNPJ__C = '25.367.207/0001-77');
+Account A8 = New Account(Name = 'NETFLIX', Phone = '8484613119', CNPJ__C = '70.092.154/0001-52');
+Account A9 = New Account(Name = 'HBO', Phone = '9912345678', CNPJ__C = '83.866.003/0001-47');
+Account A10 = New Account(Name = 'SBT', Phone = '8198765432', CNPJ__C = '35.737.525/0001-00');
+
+LIST<Account> contas = new list <Account>();
+contas.add(A1);
+contas.add(A2);
+contas.add(A3);
+contas.add(A4);
+contas.add(A5);
+contas.add(A6);
+contas.add(A7);
+contas.add(A8);
+contas.add(A9);
+contas.add(A10);
+
+insert contas;
+
+
+// 9.Delete 3 registros de sua escolha em Despesa e Projeto
+Despesas__c editardesp1 = new Despesas__c(
+Id = 'a0BDn000001lsWiMAI'
+);
+Delete editardesp1;
+
+Despesas__c editardesp2 = new Despesas__c(
+Id = 'a0BDn000001lvLTMAY'
+);
+Delete editardesp2;
+
+Despesas__c editardesp3 = new Despesas__c(
+Id = 'a0BDn000001ls2dMAA'
+);
+Delete editardesp3;
+
+Projeto__c editarproj1 = new Projeto__c(
+Id = 'a03Dn000003bEj6IAE'
+);
+Delete editarproj1;
+
+Projeto__c editarproj2 = new Projeto__c(
+Id = 'a03Dn000003bHHUIA2'
+);
+Delete editarproj2;
+
+Projeto__c editarproj3 = new Projeto__c(
+Id = 'a03Dn000003bTPgIAM'
+);
+Delete editarproj3;
