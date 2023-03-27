@@ -1,0 +1,189 @@
+//2 . Crie uma classe Cachorro, com os atributos string nome, peso, raça, com os seguintes métodos:    
+
+public class Cachorro {
+
+    public String nome = 'Totó';
+    public String peso = '1.20'; 
+    public string raca = ' Labrador';      
+    
+    public void infoCachorro(){
+          system.debug('nome: ' + nome + ' peso : ' + peso + ' raca: ' + raca);  
+    }
+    
+    public void latir (){
+        system.debug(nome + ' Auuuuuu');
+    }
+    
+    public void andar (){
+        system.debug(nome + ' está andando');
+    }
+    
+    public void ronronar (){
+        system.debug(nome + ' está ronronando
+
+
+
+
+Cachorro novo = new Cachorro();
+novo.latir();
+novo.andar();
+novo.ronronar();
+novo.infoCachorro();
+
+
+
+
+//3 - Crie uma classe chamada Pizzaria, com o seguinte método:
+
+public class Pizzaria {
+    public void pedir(String pizza) {
+        if (pizza == 'Calabresa') {
+            System.debug('O valor da Pizza de Calabresa é: R$ 45,00');
+        } else if (pizza == '4 Queijos') {
+            System.debug('Pizza 4 Queijos, valor R$ 50,00');
+        } else if (pizza == 'Maria Bonita') {
+            System.debug('Pizza Maria Bonita, R$ 60,00');
+        } else {
+            System.debug('Não possuímos essa Pizza');
+        }
+    }
+}
+
+
+Pizzaria pizzaria = new Pizzaria();
+pizzaria.pedir('Calabresa');
+
+
+
+
+//4 - Faça uma calculdadora que realize as 4 principais operações (Adição,Sub,Div,Mult)
+
+public class Calc3 {
+   
+    public static Decimal somar(Decimal n1, Decimal n2) {
+        return n1 + n2;
+    }
+    
+    public static Decimal subtrair(Decimal n1, Decimal n2) {
+        return n1 - n2;
+    }
+    
+    public static Decimal multiplicar(Decimal n1, Decimal n2) {
+        return n1 * n2;
+    }
+    
+    public static Decimal dividir(Decimal n1, Decimal n2) {
+        return n1 / n2;
+}
+}
+
+
+Calc3 novo = new Calc3();
+Decimal n1 = 10;
+Decimal n2 = 5;
+Decimal resultado;
+
+resultado = Calc3.somar(n1, n2);
+System.debug('Soma: ' + resultado);
+
+resultado = Calc3.subtrair(n1, n2);
+System.debug('Subtração: ' + resultado);
+
+resultado = Calc3.multiplicar(n1, n2);
+System.debug('Multiplicação: ' + resultado);
+
+resultado = Calc3.dividir(n1, n2);
+System.debug('Divisão: ' + resultado);
+
+
+
+
+//5-Conversor de medidas 
+
+public class calc5 {
+      public static Decimal polegada(Decimal pol){
+        return pol*2.54;}
+    public static Decimal dolar(Decimal dol){
+        return dol*5.31;}
+    public static Decimal euro(Decimal euro){
+        return euro*5.60;}
+    public static Decimal libra(Decimal libra){
+        return libra*6.39;}
+    public static Decimal km(Decimal km){
+        return km*1000;}
+    public static decimal milha (decimal milha){
+        return milha*1.60934;}
+	public static decimal fahrenheit (decimal far){
+        return (far-32)/1.8;}
+    public static decimal hectar (decimal hectar){
+        return hectar/100;}
+    public static decimal segundo (decimal seg){
+        return seg*1000;}
+    public static decimal dia (decimal dia){
+        return dia*24;}
+}
+
+
+calc5 nova = new calc5();
+
+Decimal pol = 555;
+System.debug( pol + ' polegadas == ' + calc5.polegada(pol) + ' centimetros.');
+
+decimal dol = 64;
+System.debug(dol + ' dolares ==' + calc5.dolar(dol)+ ' reais.');
+
+Decimal euro = 30;
+System.debug(euro + ' euro ==' + calc5.euro(euro) + ' reais');
+
+Decimal libra = 1000;
+System.debug(libra + ' libra ==' + calc5.libra(libra) + 'reais.');
+
+Decimal km = 50;
+System.debug(km + ' quilometros== ' + calc5.km(km) + 'metros');
+
+decimal milha = 100;
+System.debug(milha + ' milha == ' + calc5.milha(milha).setscale(2) + ' quilometros.');
+
+decimal fahrenheit = 100;
+System.debug(fahrenheit + ' fahrenheit == ' + calc5.fahrenheit(fahrenheit).setscale(2) + ' celsius.');
+
+decimal hectar = 100;
+System.debug(hectar + ' hectar ==' + calc5.hectar(hectar).setscale(2) + ' quilometro');
+
+decimal segundo = 60;
+    System.debug(segundo + ' segundo ==' + calc5.segundo(segundo) + ' milésimos de segundo');
+
+decimal dia = 2;
+    System.debug(dia + ' dia ==' + calc5.dia(dia) + ' horas');
+
+
+
+
+//6- Calculo de Areas Geométricas
+
+public class Calculadora6 {
+    
+    public static decimal quadrado(decimal b, decimal h){
+        return b*h;}
+	public static decimal retangulo(decimal b, decimal h){
+        return b*h;}
+    public static decimal triangulo(decimal b, decimal h){
+        return (b*h)/2;}
+    public static decimal circulo(decimal r, decimal pi){
+        return (r*r)*pi;}
+    public static decimal losango(decimal b, decimal h){
+        return (b*h)/2;}
+}
+
+
+
+Calculadora6 nova = new Calculadora6();
+Decimal b = 6;
+Decimal h = 10;
+decimal r = 5;
+decimal pi = 3.14159265359;
+System.debug('A área do quadrado é ' + Calculadora6.quadrado(b, h));
+System.debug('A área do retângulo é ' + Calculadora6.retangulo(b, h));
+System.debug('A área do triângulo é ' + Calculadora6.triangulo(b, h));
+System.debug('A área do círculo é ' + Calculadora6.circulo(r, pi));
+System.debug('A área do losango é ' + Calculadora6.losango(b, h));
